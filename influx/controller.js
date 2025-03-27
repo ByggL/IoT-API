@@ -1,18 +1,54 @@
 const { influxClient } = require("../config/database");
+const { Point } = require("@influxdata/influxdb-client");
+const { hostname } = require("node:os");
 
-let org = `Ynov`;
-let bucket = `metrics`;
+async function testWriteInflux() {
+  let org = `Ynov`;
+  let bucket = `metrics`;
 
-let writeClient = influxClient.getWriteApi(org, bucket, "ns");
+  let writeApi = influxClient.getWriteApi(org, bucket, "ns");
+  writeApi.useDefaultTags({ location: hostname() });
 
-for (let i = 0; i < 5; i++) {
-  let point = new Point("measurement1").tag("tagname1", "tagvalue1").intField("field1", i);
+  // write point with the current (client-side) timestamp
+  const point1 = new Point("temperature").tag("example", "write.ts").floatField("value", 20 + Math.round(100 * Math.random()) / 10);
+  writeApi.writePoint(point1);
+  console.log(` ${point1}`);
+  // write point with a custom timestamp
+  const point2 = new Point("temperature")
+    .tag("example", "write.ts")
+    .floatField("value", 10 + Math.round(100 * Math.random()) / 10)
+    .timestamp(new Date()); // can be also a number, but in writeApi's precision units (s, ms, us, ns)!
+  writeApi.writePoint(point2);
+  console.log(` ${point2.toLineProtocol(writeApi)}`);
 
-  void setTimeout(() => {
-    writeClient.writePoint(point);
-  }, i * 1000); // separate points by 1 second
-
-  void setTimeout(() => {
-    writeClient.flush();
-  }, 5000);
+  try {
+    await writeApi.close();
+    console.log("FINISHED ...");
+  } catch (e) {
+    console.error(e);
+    console.log("\nFinished ERROR");
+  }
 }
+
+function testQueryInflux() {
+  let org = `Ynov`;
+  let queryClient = influxClient.getQueryApi(org);
+  let fluxQuery = `from(bucket: "metrics")
+ |> range(start: -10m)
+ |> filter(fn: (r) => r._measurement == "measurement1")`;
+
+  queryClient.queryRows(fluxQuery, {
+    next: (row, tableMeta) => {
+      const tableObject = tableMeta.toObject(row);
+      console.log(tableObject);
+    },
+    error: (error) => {
+      console.error("\nError", error);
+    },
+    complete: () => {
+      console.log("\nSuccess");
+    },
+  });
+}
+
+module.exports = { testWriteInflux, testQueryInflux };
