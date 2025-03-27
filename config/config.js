@@ -1,10 +1,9 @@
 const configs = {
   development: {
-    username: "root",
+    username: "postgres",
     password: "password",
-    database: "licenses_extension_db",
+    database: "postgres",
     host: "localhost",
-    dialect: "postgres",
     port: 3001,
   },
   test: {
@@ -12,7 +11,6 @@ const configs = {
     password: "ER79jtZb59Zet2",
     database: "licenses_extension_db",
     host: "localhost",
-    dialect: "postgres",
     port: 8001,
   },
   production: {
@@ -20,16 +18,12 @@ const configs = {
     password: "ER79jtZb59Zet2",
     database: "licenses_extension_db",
     host: "localhost",
-    dialect: "postgres",
     port: 8001,
   },
 };
 
 const apiconfig = configs.development;
 
-const test_file = "C:/Users/SamuelLEOBON/OneDrive - BWORKSHOP/Documents/netsuite-esker testing/test.js";
-
 module.exports = {
   apiconfig,
-  test_file,
 };

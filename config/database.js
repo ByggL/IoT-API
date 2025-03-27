@@ -1,18 +1,17 @@
+// repl.repl.ignoreUndefined = true;
+
+const INFLUXDB_TOKEN = "uyVICQOLPzfcjQSWPZmeYlWenK4OsdxRVEKh69uD2ggnqglGOuVSrzFY5Jm-KTmHw38tpvX1ePm67kWQULT-Pg==";
+
 const Sequelize = require("sequelize");
 const { apiconfig } = require("./config.js");
-// const PostGresDialect = require("@Sequelize/postgres");
+const { InfluxDB, Point } = require("@influxdata/influxdb-client");
 
-// const instance = config.development; // CHANGE TO DESIRED INSTANCE
-// à ne définir qu'une fois (et pas à la fois dans server.js et ici)
+const url = "http://localhost:8086";
 
-module.exports = new Sequelize({
-  database: apiconfig.database,
-  user: apiconfig.username,
-  password: apiconfig.password,
-  host: apiconfig.host,
-  dialect: apiconfig.dialect,
-  quoteIdentifiers: false,
-  port: 5432,
-  ssl: true,
-  clientMinMessages: "notice",
-});
+const psdb = new Sequelize(`postgres://postgres:password@localhost:5432/postgres`, { dialect: "postgres" });
+const influxClient = new InfluxDB({ url, INFLUXDB_TOKEN });
+
+module.exports = {
+  psdb,
+  influxClient,
+};
