@@ -3,7 +3,7 @@ const { psdb } = require("../../config/database");
 
 const Device = psdb.define("devices", {
   id: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
     // allowNull: false,
     autoIncrement: true,
     primaryKey: true,

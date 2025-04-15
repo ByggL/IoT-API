@@ -8,7 +8,14 @@ exports.writeToInflux = async (req, res) => {
 
   let writeClient = influxClient.getWriteApi(org, bucket, "ns");
 
-  const { deviceid, temp, hum, timestamp } = req.body;
+  console.log(req.body);
+
+  if (!req.body) {
+    res.status(400).json({ error: "Body is undefined" });
+    return;
+  }
+
+  const { deviceid, temperature, humidity, timestampValue } = req.body;
 
   const deviceInfo = await Device.findOne({ where: { id: deviceid } });
 
@@ -16,9 +23,9 @@ exports.writeToInflux = async (req, res) => {
     .tag("deviceid", deviceid)
     .tag("location", deviceInfo.location.trim().replace(/\s/g, ""))
     .tag("type", deviceInfo.measuretype)
-    .floatField("temp", temp)
-    .floatField("hum", hum)
-    .timestamp(new Date(timestamp));
+    .floatField("temperature", temperature)
+    .floatField("humidity", humidity)
+    .timestamp(new Date(timestampValue));
   console.log("New point created");
 
   writeClient.writePoint(point);

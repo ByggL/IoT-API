@@ -34,12 +34,12 @@ exports.createDevice = async (req, res) => {
   //   return;
   // }
 
-  const { name, type, measuretype, location } = req.body;
+  const { id, name, type, measuretype, location } = req.body;
 
   const createdAt = new Date();
   const updatedAt = new Date();
 
-  const id = (await Device.max("id")) + 1 || 1;
+  // const id = (await Device.max("id")) + 1 || 1;
 
   try {
     const newDevice = await Device.create({
