@@ -80,6 +80,28 @@ exports.getDeviceByName = async (req, res) => {
   }
 };
 
+// Controller method to get a device by ID
+exports.getDeviceByID = async (req, res) => {
+  // if (tokenIsInvalid(req)) {
+  //   res.status(401).json({ error: "401 Unauthorized : Unauthentified User" });
+  //   return;
+  // }
+
+  const reqid = req.params.id;
+
+  try {
+    const device = await Device.findOne({ where: { id: reqid } });
+    if (device) {
+      res.json(device);
+    } else {
+      res.status(404).json({ error: "404 Not Found : Device not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ error: "500 Internal Server Error" });
+    console.log(error);
+  }
+};
+
 // Controller method to update a device status by its name
 exports.updateDevice = async (req, res) => {
   // if (tokenIsInvalid(req)) {
