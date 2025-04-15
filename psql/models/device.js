@@ -9,17 +9,20 @@ const Device = psdb.define("devices", {
     primaryKey: true,
   },
   name: {
-    type: DataTypes.STRING(30),
-    defaultValue: "",
+    type: DataTypes.STRING,
+    allowNull: false,
+    // defaultValue: "",
   },
   type: {
-    type: DataTypes.STRING(50),
+    type: DataTypes.STRING,
+    allowNull: true,
   },
   measuretype: {
-    type: DataTypes.STRING(30),
+    type: DataTypes.STRING,
+    allowNull: true,
   },
   location: {
-    type: DataTypes.STRING(100),
+    type: DataTypes.STRING,
     allowNull: true,
   },
 });

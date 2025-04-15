@@ -39,17 +39,17 @@ exports.createDevice = async (req, res) => {
   const createdAt = new Date();
   const updatedAt = new Date();
 
-  const id = (await Device.max("id")) + 1;
+  const id = (await Device.max("id")) + 1 || 1;
 
   try {
     const newDevice = await Device.create({
-      id,
-      name,
-      type,
-      measuretype,
-      location,
-      createdAt,
-      updatedAt,
+      id: id,
+      name: name,
+      type: type,
+      measuretype: measuretype,
+      location: location,
+      createdAt: createdAt,
+      updatedAt: updatedAt,
     });
     res.status(201).json(newDevice);
   } catch (error) {
