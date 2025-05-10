@@ -17,6 +17,11 @@ exports.writeToInflux = async (req, res) => {
 
   const { deviceid, temperature, humidity, timestampValue } = req.body;
 
+  if (!temperature || !humidity) {
+    res.status(400).json({ error: "Some values are null" });
+    return;
+  }
+
   const deviceInfo = await Device.findOne({ where: { id: deviceid } });
 
   let point = new Point("data")

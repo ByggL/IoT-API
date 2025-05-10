@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const deviceController = require("./controller");
+const influxController = require("./controller");
 
 /////////// V1 VERSION //////////
-router.get("/", deviceController.queryAll);
+router.get("/", influxController.queryAll);
 
-router.post("/", deviceController.writeToInflux);
+router.post("/", influxController.writeToInflux);
 
 // router.get("/name/:name", deviceController.getDeviceByName);
 

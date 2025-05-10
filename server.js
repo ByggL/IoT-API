@@ -4,10 +4,9 @@ const app = express();
 const deviceRoutes = require("./psql/routes/deviceRoutes.js");
 const { apiconfig } = require("./config/config.js");
 const { psdb } = require("./config/database"); // db is the Sequelize instance created in database.js
-const { testWriteInflux, testQueryInflux } = require("./influx/controller");
 const influxRoutes = require("./influx/routes.js");
 
-const port = 3000;
+const port = 3001;
 
 /*
   TODO :
@@ -38,7 +37,7 @@ app.use("/device", deviceRoutes);
 app.use("/influx", influxRoutes);
 
 app.get("/", (req, res) => {
-  res.send("Server Online");
+  res.json({ message: "Server Online" });
 });
 
 app.listen(port, () => {
