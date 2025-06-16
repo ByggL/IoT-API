@@ -1,5 +1,11 @@
 const Device = require("../models/device");
 
+require("dotenv").config();
+
+const tokens = {
+  devices: process.env.DEVICES_TOKEN,
+};
+
 const datetimeformat = (date) => {
   var mm = date.getMonth() + 1; // getMonth() is zero-based
   var dd = date.getDate();
@@ -10,14 +16,17 @@ const datetimeformat = (date) => {
 };
 
 const tokenIsInvalid = (tokenBearingRequest) => {
-  return tokenBearingRequest.headers.authorization.replace("Bearer ", "") !== tokens.devices || tokenBearingRequest.headers.authorization == null;
+  return (
+    tokenBearingRequest.headers.authorization.replace("Bearer ", "") !== tokens.devices ||
+    tokenBearingRequest.headers.authorization == null
+  );
 };
 
 exports.getAllDevices = async (req, res) => {
-  // if (tokenIsInvalid(req)) {
-  //   res.status(401).json({ error: "401 Unauthorized : Unauthentified User" });
-  //   return;
-  // }
+  if (tokenIsInvalid(req)) {
+    res.status(401).json({ error: "401 Unauthorized : Unauthentified User" });
+    return;
+  }
 
   try {
     const devices = await Device.findAll();
@@ -29,10 +38,10 @@ exports.getAllDevices = async (req, res) => {
 };
 
 exports.createDevice = async (req, res) => {
-  // if (tokenIsInvalid(req)) {
-  //   res.status(401).json({ error: "401 Unauthorized : Unauthentified User" });
-  //   return;
-  // }
+  if (tokenIsInvalid(req)) {
+    res.status(401).json({ error: "401 Unauthorized : Unauthentified User" });
+    return;
+  }
 
   const { id, name, type, measuretype, location } = req.body;
 
@@ -60,10 +69,10 @@ exports.createDevice = async (req, res) => {
 
 // Controller method to get a device by name
 exports.getDeviceByName = async (req, res) => {
-  // if (tokenIsInvalid(req)) {
-  //   res.status(401).json({ error: "401 Unauthorized : Unauthentified User" });
-  //   return;
-  // }
+  if (tokenIsInvalid(req)) {
+    res.status(401).json({ error: "401 Unauthorized : Unauthentified User" });
+    return;
+  }
 
   const reqname = req.params.name;
 
@@ -82,10 +91,10 @@ exports.getDeviceByName = async (req, res) => {
 
 // Controller method to get a device by ID
 exports.getDeviceByID = async (req, res) => {
-  // if (tokenIsInvalid(req)) {
-  //   res.status(401).json({ error: "401 Unauthorized : Unauthentified User" });
-  //   return;
-  // }
+  if (tokenIsInvalid(req)) {
+    res.status(401).json({ error: "401 Unauthorized : Unauthentified User" });
+    return;
+  }
 
   const reqid = req.params.id;
 
@@ -104,10 +113,10 @@ exports.getDeviceByID = async (req, res) => {
 
 // Controller method to update a device status by its name
 exports.updateDevice = async (req, res) => {
-  // if (tokenIsInvalid(req)) {
-  //   res.status(401).json({ error: "401 Unauthorized : Unauthentified User" });
-  //   return;
-  // }
+  if (tokenIsInvalid(req)) {
+    res.status(401).json({ error: "401 Unauthorized : Unauthentified User" });
+    return;
+  }
 
   const reqname = req.params.name;
   const { name, type, measuretype, location } = req.body;
@@ -134,10 +143,10 @@ exports.updateDevice = async (req, res) => {
 
 // Controller method to delete a device by its name
 exports.deleteDevice = async (req, res) => {
-  // if (tokenIsInvalid(req)) {
-  //   res.status(401).json({ error: "401 Unauthorized : Unauthentified User" });
-  //   return;
-  // }
+  if (tokenIsInvalid(req)) {
+    res.status(401).json({ error: "401 Unauthorized : Unauthentified User" });
+    return;
+  }
 
   const reqname = req.params.name;
 

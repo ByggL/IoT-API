@@ -2,6 +2,12 @@ const { influxClient } = require("../config/database");
 const { Point } = require("@influxdata/influxdb-client");
 const Device = require("../psql/models/device");
 
+require("dotenv").config();
+
+const tokens = {
+  influx: process.env.INFLUX_TOKEN,
+};
+
 exports.writeToInflux = async (req, res) => {
   let org = `Ynov`;
   let bucket = `metrics`;
