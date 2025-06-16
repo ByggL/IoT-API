@@ -8,7 +8,19 @@ const tokens = {
   influx: process.env.INFLUX_TOKEN,
 };
 
+const tokenIsInvalid = (tokenBearingRequest) => {
+  return (
+    tokenBearingRequest.headers.authorization.replace("Bearer ", "") !== tokens.devices ||
+    tokenBearingRequest.headers.authorization == null
+  );
+};
+
 exports.writeToInflux = async (req, res) => {
+  if (tokenIsInvalid(req)) {
+    res.status(401).json({ error: "401 Unauthorized : Unauthentified User" });
+    return;
+  }
+
   let org = `Ynov`;
   let bucket = `metrics`;
 
@@ -53,6 +65,11 @@ exports.writeToInflux = async (req, res) => {
 };
 
 exports.queryAll = async (req, res) => {
+  if (tokenIsInvalid(req)) {
+    res.status(401).json({ error: "401 Unauthorized : Unauthentified User" });
+    return;
+  }
+
   let org = `Ynov`;
   let queryClient = influxClient.getQueryApi(org);
   let fluxQuery = `from(bucket: "metrics")
@@ -69,6 +86,7 @@ exports.queryAll = async (req, res) => {
     },
     error: (error) => {
       console.error("\nError", error);
+      res.status(500).json({ error: "500 Internal Server Error" });
     },
     complete: () => {
       console.log("\nSuccess");
