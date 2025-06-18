@@ -27,7 +27,7 @@ const config = {
   password: "password",
   database: "iot_db",
   host: "localhost",
-  port: 3001,
+  port: 80,
 };
 
 const apiconfig = config;

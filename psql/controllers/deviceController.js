@@ -16,10 +16,10 @@ const datetimeformat = (date) => {
 };
 
 const tokenIsInvalid = (tokenBearingRequest) => {
-  return (
-    tokenBearingRequest.headers.authorization.replace("Bearer ", "") !== tokens.devices ||
-    tokenBearingRequest.headers.authorization == null
-  );
+  /* if (tokenBearingRequest.headers.authorization == null) return true;
+  else if (tokenBearingRequest.headers.authorization.replace("Bearer ", "") !== tokens.devices) return true;
+  else return false; */
+  return false;
 };
 
 exports.getAllDevices = async (req, res) => {

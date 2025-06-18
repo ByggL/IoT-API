@@ -6,7 +6,7 @@ const { apiconfig } = require("./config/config.js");
 const { psdb } = require("./config/database"); // db is the Sequelize instance created in database.js
 const influxRoutes = require("./influx/routes.js");
 
-const port = 3001;
+const port = 8000;
 
 /*
   TODO :
@@ -40,6 +40,6 @@ app.get("/", (req, res) => {
   res.json({ message: "Server Online" });
 });
 
-app.listen(port, () => {
+app.listen(port, "0.0.0.0", () => {
   console.log(`Server started on port ${port}.`);
 });
